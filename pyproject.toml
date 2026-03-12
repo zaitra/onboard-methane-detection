@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "onboard-methane-detection"
+version = "0.1.0"
+description = "Onboard methane detection"
+readme = "README.md"
+license = {file = "LICENSE.md"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Jonáš Herec", email = "jonas.herec@zaitra.io"}
+]
+keywords = ["methane", "detection", "hyperspectral", "remote-sensing", "satellite"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+dependencies = [
+    "numpy",
+    "onnxruntime"
+]
+
+[project.urls]
+Homepage = "https://github.com/zaitra/onboard-methane-detection"
+Repository = "https://github.com/zaitra/onboard-methane-detection"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["onboard_methane_detection*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "*.yml", "*.json"]
