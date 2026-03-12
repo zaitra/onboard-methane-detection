@@ -1,0 +1,8 @@
+*__pycache__/
+*onboard_methane_detection.egg-info/
+EMIT_L1B_RAD_001_20230824T070101_2323605_011.nc
+playbook.ipynb
+rgb_indices.npy
+selected_ch4_spectrum.npy
+selected_indices_ch4.npy
+test_functions.py
