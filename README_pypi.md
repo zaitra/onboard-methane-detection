@@ -120,51 +120,9 @@ for image in acquired_images:
 
 ## Lightweight Onboard Package Build
 
-For deployment on resource-constrained satellite hardware, you may want to build a minimal version of this library containing only the necessary modules. A deployment script `build_package_for_deployment.py` is provided for this purpose. The lightweight build depends only on NumPy, and adds ONNX Runtime only if you include `inference`.
+For deployment on resource-constrained satellite hardware, a build script is provided that generates a minimal version of this library with only the modules you need. It supports optional subpackages (`processing`, `inference`, `onground`) and depends only on NumPy by default, adding ONNX Runtime only when inference is included.
 
-### Usage
-
-Run the script to generate a lightweight installable package:
-
-```bash
-# Base-only build (no optional subpackages):
-# Includes only `compute_base_mag1c_SAS` (Mag1c-SAS core math).
-python build_package_for_deployment.py --output satellite_pkg
-
-# Add optional subpackages as needed:
-python build_package_for_deployment.py --parts processing inference --output satellite_pkg
-```
-
-### What Gets Included
-
-The build script always includes the base Mag1c-SAS implementation and then optionally adds subpackages. You can omit `--parts` entirely to keep the package as small as possible.
-
-- Base (always included):
-  - Exports `compute_base_mag1c_SAS(...)` which expects batched, flattened radiance data shaped like `(B, N, C)`.
-  - Import path: `from onboard_methane_detection import compute_base_mag1c_SAS`
-  - This is the minimal dependency footprint and is suitable if you already handle reshaping/masking/sampling in your own pipeline.
-- `processing` (optional):
-  - Adds `mag1c_sas(image, methane_spectrum, ...)`, a more convenient Mag1c-SAS wrapper for CHW hyperspectral cubes.
-  - Automatically handles masking invalid pixels, reshaping CHW -> `(B, N, C)`, sampling pixels for covariance estimation, and reshaping the output back.
-- `inference` (optional):
-  - Adds LinkNet ONNX inference utilities: `initialize_model(...)`, `normalize_image(...)`, and `model_inference(...)`.
-  - `model_inference(...)` can use tiling, but tiling utilities live in `processing`, so include both `inference` and `processing` if you want tiled inference.
-  - Use this when you want to run the segmentation model onboard.
-- `onground` (optional):
-  - Adds on-ground preparation helpers: `generate_methane_spectrum(...)`, `select_the_bands_by_transmittance(...)`, and `select_rgb_bands(...)`.
-  - Use this to generate the methane spectrum template and select bands/indices to export for the onboard session.
-
-### Arguments
-
-- `--parts`: A space-separated list of optional subpackages to include in the build. Available options are `inference`, `processing`, and `onground`. If you want the smallest possible package, omit `--parts` entirely (base-only Mag1c-SAS).
-- `--output`: The destination directory where the lightweight package will be generated (default: `satellite_package`).
-- `--source`: The directory of the source package (default: `onboard_methane_detection`).
-
-Once the package is generated, you can install it on your target hardware using:
-
-```bash
-pip install ./satellite_pkg
-```
+For full usage instructions, available options, and details on what each subpackage includes, see the [GitHub repository](https://github.com/zaitra/onboard-methane-detection).
 
 # Acknowledgments
 A huge thank you to the creators of [Mag1c](https://github.com/markusfoote/mag1c). This project uses core files and edited code from their original repository, and it wouldn't have been possible without their foundational work!
