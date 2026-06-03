@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "onboard-methane-detection"
-version = "0.1.1"
+version = "0.1.2"
 description = "Onboard methane detection"
 readme = "README_pypi.md"
 license = {file = "LICENSE.md"}
@@ -34,4 +34,4 @@ where = ["."]
 include = ["onboard_methane_detection*"]
 
 [tool.setuptools.package-data]
-"*" = ["*.yaml", "*.yml", "*.json"]
+"*" = ["*.yaml", "*.yml", "*.json", "*.npy", "*.onnx"]
